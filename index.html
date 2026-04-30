@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VSM</title>
+
+  <!-- ============================================================
+       FONTS
+       You can swap these Google Fonts by visiting fonts.google.com,
+       picking a font, and replacing the link + font-family below.
+  ============================================================ -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    /* ============================================================
+       CSS VARIABLES — EASY CUSTOMIZATION
+       Change colors, fonts, and sizing all in one place here.
+    ============================================================ */
+    :root {
+      --black:       #080808;        /* Main background */
+      --dark:        #111111;        /* Card / section backgrounds */
+      --gold:        #B8972A;        /* Primary accent color (dull gold) */
+      --gold-light:  #D4AF5A;        /* Lighter gold for hover states */
+      --gold-dim:    #7A6320;        /* Darker gold for subtle details */
+      --white:       #F5F0E8;        /* Main text color (warm white) */
+      --grey:        #888880;        /* Muted text */
+      --border:      rgba(184,151,42,0.2); /* Subtle gold border */
+
+      --font-display: 'Cormorant Garamond', serif; /* Headings */
+      --font-body:    'Raleway', sans-serif;        /* Body text */
+
+      --max-width: 1200px;
+      --section-padding: 100px 5%;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Gold line divider — used between sections */
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 24px auto;
+    }
+
+    /* Section-level label (e.g. "— ABOUT —") */
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    /* Large decorative section heading */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--white);
+    }
+
+    /* Shared section wrapper */
+    section {
+      padding: var(--section-padding);
+    }
+
+    /* Center-align utility */
+    .text-center { text-align: center; }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ -->
+    <!-- To change nav links: edit the <a> tags inside <nav> below -->
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 5%;
+      transition: background 0.4s, padding 0.4s;
+    }
+
+    nav.scrolled {
+      background: rgba(8,8,8,0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 5%;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ---- Logo ---- */
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      padding-top: 7px;
+    }
+
+    /* ---- Nav links ---- */
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--grey);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ---- Mobile hamburger (shown on small screens) ---- */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      width: 24px;
+      height: 1px;
+      background: var(--gold);
+      transition: all 0.3s;
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================
+       To change the hero image: replace "YOUR-HERO-IMAGE.jpg" in
+       the <section id="hero"> style attribute below in the HTML.
+    ============================================================ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+
+      /* ---- HERO BACKGROUND IMAGE ----
+         Replace the URL below with your own image path.
+         Example: background-image: url('images/hero.jpg');
+      ---- */
+      background-image: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Dark overlay on top of the hero image */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(8,8,8,0.55) 0%,
+        rgba(8,8,8,0.75) 60%,
+        var(--black) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      padding: 0 24px;
+      animation: fadeUp 1.2s ease both;
+    }
+
+    /* Small label above the main headline */
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      margin-bottom: 28px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-subtitle {
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      color: var(--grey);
+      max-width: 460px;
+      margin: 0 auto 44px;
+    }
+
+    /* Gold CTA button */
+    .btn {
+      display: inline-block;
+      padding: 14px 40px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .btn:hover {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    /* Scroll indicator at the bottom of hero */
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--grey);
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 1;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+
+    /* ============================================================
+       ABOUT SECTION
+    ============================================================
+       Replace the text inside the <p> tags and the image src below.
+    ============================================================ */
+    #about {
+      background: var(--black);
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-image-wrap {
+      position: relative;
+    }
+
+    /* ---- ABOUT IMAGE ----
+       Replace "YOUR-ABOUT-IMAGE.jpg" with your own image path.
+    ---- */
+    .about-image-wrap img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(20%);
+    }
+
+    /* Gold frame decoration on the image */
+    .about-image-wrap::before {
+      content: '';
+      position: absolute;
+      top: -16px; left: -16px;
+      right: 16px; bottom: 16px;
+      border: 1px solid var(--gold-dim);
+      z-index: -1;
+    }
+
+    .about-text .section-label { text-align: left; }
+    .about-text .section-title { text-align: left; margin-bottom: 28px; }
+
+    .about-text p {
+      color: var(--grey);
+      font-size: 0.95rem;
+      margin-bottom: 18px;
+    }
+
+    /* Highlighted stat row */
+    .about-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat-item { }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 4px;
+    }
+
+    /* ============================================================
+       SERVICES SECTION
+    ============================================================
+       To add/remove a service card: copy or delete a .service-card
+       block in the HTML below. Change the title, description, and icon.
+    ============================================================ */
+    #services {
+      background: var(--dark);
+    }
+
+    .services-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .services-header { margin-bottom: 60px; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2px; /* thin gold gap between cards */
+      background: var(--border);
+    }
+
+    .service-card {
+      background: var(--dark);
+      padding: 48px 36px;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card:hover { background: #1a1a16; }
+
+    /* Decorative gold line that slides in on hover */
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.4s ease;
+    }
+
+    .service-card:hover::after { width: 100%; }
+
+    /* Icon (emoji or SVG). Change the emoji in the HTML span below. */
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .service-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 14px;
+      color: var(--white);
+    }
+
+    .service-desc {
+      color: var(--grey);
+      font-size: 0.88rem;
+      line-height: 1.8;
+    }
+
+    /* ============================================================
+       PORTFOLIO / GALLERY SECTION
+    ============================================================
+       To swap images: replace the src="" values in the <img> tags
+       inside .portfolio-item divs. Aim for 4:3 or square images.
+    ============================================================ */
+    #portfolio {
+      background: var(--black);
+    }
+
+    .portfolio-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .portfolio-header { margin-bottom: 60px; }
+
+    /* Filter buttons */
+    .portfolio-filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .filter-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--grey);
+      padding: 8px 20px;
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Masonry-style grid */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    /* Makes one card span 2 columns for visual rhythm */
+    .portfolio-item:nth-child(1),
+    .portfolio-item:nth-child(5) { grid-column: span 2; }
+
+    .portfolio-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    /* ---- PORTFOLIO IMAGES ----
+       Replace the src="" with your own image paths.
+       Recommended size: at least 800px wide.
+    ---- */
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+      filter: grayscale(30%);
+    }
+
+    .portfolio-item:hover img {
+      transform: scale(1.05);
+      filter: grayscale(0%);
+    }
+
+    /* Overlay on hover */
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8,8,8,0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+    .portfolio-overlay h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--white);
+    }
+
+    .portfolio-overlay span {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 6px;
+    }
+
+    /* ============================================================
+       TESTIMONIALS SECTION
+    ============================================================
+       To add/edit testimonials: change the text inside .testimonial
+       blocks in the HTML. Each block = one quote.
+    ============================================================ */
+    #testimonials {
+      background: var(--dark);
+    }
+
+    .testimonials-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+      margin-top: 60px;
+    }
+
+    .testimonial {
+      padding: 40px;
+      border: 1px solid var(--border);
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .testimonial:hover { border-color: var(--gold-dim); }
+
+    /* Large decorative quote mark */
+    .testimonial::before {
+      content: '\201C';
+      position: absolute;
+      top: -10px; left: 32px;
+      font-family: var(--font-display);
+      font-size: 5rem;
+      color: var(--gold);
+      line-height: 1;
+      opacity: 0.6;
+    }
+
+    .testimonial-text {
+      color: var(--grey);
+      font-size: 0.92rem;
+      line-height: 1.9;
+      margin-bottom: 28px;
+      margin-top: 20px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* ---- TESTIMONIAL AVATAR ----
+       Replace src="" with paths to client photos.
+    ---- */
+    .testimonial-author img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--gold-dim);
+    }
+
+    .author-name {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .author-role {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+    }
+
+    /* ============================================================
+       CONTACT SECTION
+    ============================================================
+       To link the form to a real backend, see the note near the
+       <form> tag in the HTML below.
+    ============================================================ */
+    #contact {
+      background: var(--black);
+    }
+
+    .contact-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-inner .section-title { margin-bottom: 12px; }
+
+    .contact-tagline {
+      color: var(--grey);
+      font-size: 0.9rem;
+      max-width: 440px;
+      margin: 0 auto 56px;
+    }
+
+    /* Contact form */
+    .contact-form {
+      display: grid;
+      gap: 20px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* Form inputs and textarea */
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      background: var(--dark);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 16px 20px;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.3s;
+      resize: vertical;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--gold);
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: var(--grey);
+      opacity: 0.6;
+    }
+
+    .contact-form textarea { min-height: 140px; }
+
+    /* Submit button — full width */
+    .btn-full {
+      width: 100%;
+      padding: 18px;
+      font-size: 0.8rem;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================
+       Change the name, social links, and nav links below.
+    ============================================================ */
+    footer {
+      background: var(--dark);
+      padding: 60px 5% 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand .nav-logo { font-size: 2rem; }
+
+    .footer-tagline {
+      color: var(--grey);
+      font-size: 0.85rem;
+      max-width: 240px;
+      margin-top: 10px;
+    }
+
+    .footer-links h4 {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-links ul { list-style: none; }
+
+    .footer-links ul li { margin-bottom: 10px; }
+
+    .footer-links ul a {
+      color: var(--grey);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.3s;
+    }
+
+    .footer-links ul a:hover { color: var(--gold); }
+
+    /* Social icons row */
+    .footer-social {
+      display: flex;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .social-link {
+      width: 38px; height: 38px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--grey);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+
+    .social-link:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--grey);
+      letter-spacing: 0.08em;
+    }
+
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollLine {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      51%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* Fade-in on scroll (applied via JS below) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       RESPONSIVE — MOBILE
+    ============================================================ */
+    @media (max-width: 768px) {
+
+      :root { --section-padding: 70px 5%; }
+
+      /* Hide desktop nav, show hamburger */
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--black);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        z-index: 999;
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 1rem; }
+      .nav-toggle { display: flex; z-index: 1001; }
+
+      /* Stack about grid */
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .about-image-wrap { max-width: 400px; margin: 0 auto; }
+
+      /* Single-column portfolio */
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .portfolio-item:nth-child(1),
+      .portfolio-item:nth-child(5) { grid-column: span 1; }
+
+      /* Stack form row */
+      .form-row { grid-template-columns: 1fr; }
+
+      /* Stack footer */
+      .footer-top { flex-direction: column; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVIGATION
+       - Change logo text (currently "VSM")
+       - Add/remove nav links as needed
+  ============================================================ -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">
+  <img src="vsm.png" alt="VSM" style="height: 30px;">
+</a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- Hamburger button (mobile only) -->
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+
+  <!-- ============================================================
+       HERO SECTION
+       - Change the eyebrow, title, and subtitle text
+       - To change the background image: find the #hero rule in
+         the CSS above and replace the background-image URL
+  ============================================================ -->
+  <section id="hero">
+    <div class="hero-content">
+      <!-- Small label above the title -->
+      <p class="hero-eyebrow">Welcome to VSM</p>
+
+      <!-- Main headline — <em> text appears in gold italic -->
+      <h1 class="hero-title">Never half <em>Hearted</em></h1>
+
+      <!-- Subtitle / tagline -->
+      <p class="hero-subtitle">
+        
+      </p>
+
+      <!-- CTA button — change href to link to any section or page -->
+      <a href="#contact" class="btn">Join VSM</a>
+    </div>
+
+    <div class="scroll-hint">Scroll</div>
+  </section>
+
+
+  <!-- ============================================================
+       ABOUT SECTION
+       - Replace the image src with your own photo
+       - Edit the paragraphs and stats
+  ============================================================ -->
+  <section id="about">
+    <div class="about-grid">
+
+      <!-- ---- About image: replace src with your own ---- -->
+      <div class="about-image-wrap reveal">
+        <img
+          src="Han .jpeg"
+          alt="About VSM"
+        />
+      </div>
+
+      <div class="about-text reveal">
+        <p class="section-label">— Meet our newest author —</p>
+        <h2 class="section-title">Han</h2>
+
+        <!-- Edit these paragraphs with your own story -->
+        <p>
+          VSM is an identity built on the principles of humanity,
+          emotions, and an unwavering commitment to aestheticism. Every project
+          we share reflects our insides out.
+        </p>
+        <p>
+          From concept to completion, we bring clarity and purpose to
+          everything we create — delivering results that endure.
+        </p>
+
+        <a href="#services" class="btn" style="margin-top:32px;">Explore their work</a>
+
+        <!-- Stats row — change numbers and labels -->
+        <!-- div class="about-stats">
+          <div class="stat-item">
+            <div class="stat-number">8+</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">120</div>
+            <div class="stat-label">Projects Done</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">98%</div>
+            <div class="stat-label">Client Satisfaction</div>
+          </div>
+        </div -->
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SERVICES SECTION
+       - To add a service: duplicate a .service-card block
+       - To remove one: delete the block
+       - Change the emoji icon, title, and description
+  ============================================================ -->
+  <section id="services">
+    <div class="services-inner">
+
+      <div class="services-header text-center reveal">
+        <p class="section-label">— What We Do —</p>
+        <h2 class="section-title">Our Mission</h2>
+      </div>
+
+      <div class="services-grid">
+
+        <!-- Service Card 1 -->
+        <div class="service-card reveal">
+          <span class="service-icon">✦</span> <!-- Change emoji here -->
+          <h3 class="service-title">Showcase art</h3>
+          <p class="service-desc">
+            We help you connect to an audience.
+          </p>
+        </div>
+
+        <!-- Service Card 2 -->
+        <div class="service-card reveal">
+          <span class="service-icon">◈</span>
+          <h3 class="service-title">Brand Identity</h3>
+          <p class="service-desc">
+            From logo to language, we craft identities that are cohesive,
+            memorable, and built to last.
+          </p>
+        </div>
+
+        <!-- Service Card 3 -->
+        <div class="service-card reveal">
+          <span class="service-icon">⬡</span>
+          <h3 class="service-title">Design &amp; Development</h3>
+          <p class="service-desc">
+            Beautiful, functional digital products crafted with precision
+            and attention to every last detail.
+          </p>
+        </div>
+
+        <!-- Service Card 4 -->
+        <div class="service-card reveal">
+          <span class="service-icon">◎</span>
+          <h3 class="service-title">Marketing &amp; Growth</h3>
+          <p class="service-desc">
+            Targeted campaigns and growth strategies that put your brand
+            in front of the right people at the right time.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       PORTFOLIO / GALLERY SECTION
+       - Replace img src="" values with your own images
+       - Change the overlay title and category text
+       - Add/remove .portfolio-item blocks as needed
+  ============================================================ -->
+  <section id="portfolio">
+    <div class="portfolio-inner">
+
+      <div class="portfolio-header reveal">
+        <p class="section-label">— Our Work —</p>
+        <h2 class="section-title">Portfolio</h2>
+
+        <!-- Filter buttons (decorative — hook up JS to filter if needed) -->
+        <!-- div class="portfolio-filters">
+          <button class="filter-btn active">All</button>
+          <button class="filter-btn">Branding</button>
+          <button class="filter-btn">Design</button>
+          <button class="filter-btn">Strategy</button>
+        </div -->
+      </div>
+
+      <div class="portfolio-grid">
+
+        <!-- Portfolio Item 1 (spans 2 columns) -->
+        <!-- Replace src with your image -->
+        <div class="portfolio-item reveal">
+          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000&q=80" alt="Project 1"/>
+          <div class="portfolio-overlay">
+            <h3>Project Title</h3>
+            <span>Branding</span>
+          </div>
+        </div>
+
+        <!-- Portfolio Item 2 -->
+        <div class="portfolio-item reveal">
+          <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80" alt="Project 2"/>
+          <div class="portfolio-overlay">
+            <h3>Project Title</h3>
+            <span>Design</span>
+          </div>
+        </div>
+
+        <!-- Portfolio Item 3 -->
+        <div class="portfolio-item reveal">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Project 3"/>
+          <div class="portfolio-overlay">
+            <h3>Project Title</h3>
+            <span>Strategy</span>
+          </div>
+        </div>
+
+        <!-- Portfolio Item 4 -->
+        <div class="portfolio-item reveal">
+          <img src="https://images.unsplash.com/photo-1493421419110-74f4e85ba126?w=800&q=80" alt="Project 4"/>
+          <div class="portfolio-overlay">
+            <h3>Project Title</h3>
+            <span>Design</span>
+          </div>
+        </div>
+
+        <!-- Portfolio Item 5 (spans 2 columns) -->
+        <div class="portfolio-item reveal">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1000&q=80" alt="Project 5"/>
+          <div class="portfolio-overlay">
+            <h3>Project Title</h3>
+            <span>Branding</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       TESTIMONIALS SECTION
+       - Edit quote text, author name, role, and avatar image
+       - Duplicate .testimonial blocks to add more quotes
+  ============================================================ -->
+  <section id="testimonials">
+    <div class="testimonials-inner">
+
+      <div class="text-center reveal">
+        <p class="section-label">— Kind Words —</p>
+        <h2 class="section-title">What Clients Say</h2>
+      </div>
+
+      <div class="testimonials-grid">
+
+        <!-- Testimonial 1 -->
+        <div class="testimonial reveal">
+          <p class="testimonial-text">
+            "VSM transformed our brand completely. The attention to detail
+            and the quality of work exceeded every expectation we had."
+          </p>
+          <div class="testimonial-author">
+            <!-- Replace src with client photo -->
+            <img src="https://i.pravatar.cc/80?img=11" alt="Client"/>
+            <div>
+              <div class="author-name">Sarah Mitchell</div>
+              <div class="author-role">CEO, Horizon Co.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="testimonial reveal">
+          <p class="testimonial-text">
+            "Working with VSM was effortless. They understood our vision
+            immediately and delivered results beyond what we imagined."
+          </p>
+          <div class="testimonial-author">
+            <img src="https://i.pravatar.cc/80?img=32" alt="Client"/>
+            <div>
+              <div class="author-name">James Carter</div>
+              <div class="author-role">Founder, Atlas Studio</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="testimonial reveal">
+          <p class="testimonial-text">
+            "Professional, creative, and reliable. VSM is the partner
+            every brand needs. We continue to work with them to this day."
+          </p>
+          <div class="testimonial-author">
+            <img src="https://i.pravatar.cc/80?img=47" alt="Client"/>
+            <div>
+              <div class="author-name">Layla Hassan</div>
+              <div class="author-role">Director, Lumière Group</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       CONTACT SECTION
+       - Edit the heading and tagline
+       - To connect this form to email, use a service like
+         Formspree (formspree.io): set action="https://formspree.io/f/YOUR_ID"
+         and method="POST" on the <form> tag
+  ============================================================ -->
+  <section id="contact">
+    <div class="contact-inner">
+
+      <div class="reveal">
+        <p class="section-label">— Get in Touch —</p>
+        <h2 class="section-title">Let's Work Together</h2>
+        <p class="contact-tagline">
+          Have some thoughts in mind? We'd love to hear from you. <br>
+          Reach out and let's show it to the world!
+        </p>
+      </div>
+
+      <!-- FORM: To make it work, sign up at formspree.io and replace YOUR_ID -->
+      <form class="contact-form reveal" action="#" method="POST">
+
+        <!-- Name + Email row -->
+        <div class="form-row">
+          <input type="text"  name="name"  placeholder="Your Name"  required />
+          <input type="email" name="email" placeholder="Your Email" required />
+        </div>
+
+        <!-- Subject line -->
+        <input type="text" name="subject" placeholder="Subject" />
+
+        <!-- Message -->
+        <textarea name="message" placeholder="Your Message..." required></textarea>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-full">Send Message</button>
+
+      </form>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER
+       - Change the tagline, links, and social icons
+       - Social icons use text characters; you can replace them
+         with SVG icons from heroicons.com if you prefer
+  ============================================================ -->
+  <footer>
+    <div class="footer-inner">
+
+      <div class="footer-top">
+
+        <!-- Brand block -->
+        <div class="footer-brand">
+          <a href="#hero" class="nav-logo">VSM</a>
+          <p class="footer-tagline">
+            Crafted with vision. Built to last.
+          </p>
+          <!-- Social links — replace # with your actual URLs -->
+          <div class="footer-social">
+            <a href="#" class="social-link" aria-label="Instagram">IG</a>
+            <a href="#" class="social-link" aria-label="Twitter/X">X</a>
+            <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+          </div>
+        </div>
+
+        <!-- Quick links -->
+        <div class="footer-links">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact info -->
+        <div class="footer-links">
+          <h4>Contact</h4>
+          <ul>
+            <!-- Replace with your actual info -->
+            <li><a href="mailto:hello@vsm.com">hello@vsm.com</a></li>
+            <li><a href="tel:+1234567890">+1 (234) 567-890</a></li>
+            <li><a href="#">Lahore, PK</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Copyright line — update the year/name -->
+      <div class="footer-bottom">
+        &copy; 2025 VSM. All rights reserved.
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+       No need to edit this unless you want to change behavior.
+  ============================================================ -->
+  <script>
+
+    // ---- Sticky nav: adds a dark background when you scroll down ----
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ---- Mobile menu toggle ----
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // Close mobile menu when a link is clicked
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // ---- Scroll reveal: fades elements in as you scroll ----
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer  = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target); // Only animate once
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    revealEls.forEach(el => observer.observe(el));
+
+  </script>
+
+</body>
+</html>
