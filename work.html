@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Their Work — VSM</title>
+
+  <!-- ============================================================
+       FONTS — same as main site, do not change unless you change
+       them on index.html too (for consistency).
+  ============================================================ -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    /* ============================================================
+       CSS VARIABLES — same palette as index.html
+       Change here only if you changed them on the main site too.
+    ============================================================ */
+    :root {
+      --black:      #080808;
+      --dark:       #111111;
+      --gold:       #B8972A;
+      --gold-light: #D4AF5A;
+      --gold-dim:   #7A6320;
+      --white:      #F5F0E8;
+      --grey:       #888880;
+      --border:     rgba(184,151,42,0.2);
+
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body:    'Raleway', sans-serif;
+      --max-width: 1200px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       NAVIGATION — identical to index.html
+    ============================================================ -->
+    <!-- Update links here if you rename pages -->
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 5%;
+      background: rgba(8,8,8,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--grey);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      width: 24px; height: 1px;
+      background: var(--gold);
+      transition: all 0.3s;
+    }
+
+    /* ============================================================
+       PAGE HERO — the banner at the top of this page
+       Change the title and subtitle text below in the HTML.
+    ============================================================ */
+    .page-hero {
+      min-height: 42vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 5% 72px;
+      margin-top: 0;
+      position: relative;
+      overflow: hidden;
+      background: var(--black);
+    }
+
+    /* Decorative vertical gold rule */
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      left: 5%;
+      top: 120px;
+      bottom: 72px;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent);
+      opacity: 0.5;
+    }
+
+    /* Large ghost text watermark in background */
+    .page-hero::after {
+      content: 'POEMS';
+      position: absolute;
+      right: -20px;
+      bottom: -30px;
+      font-family: var(--font-display);
+      font-size: clamp(8rem, 20vw, 18rem);
+      font-weight: 700;
+      color: rgba(184,151,42,0.04);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.04em;
+    }
+
+    .page-hero-content {
+      padding-left: 28px;
+      animation: fadeUp 1s ease both;
+    }
+
+    .page-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .page-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 300;
+      line-height: 0.95;
+      color: var(--white);
+    }
+
+    .page-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .page-subtitle {
+      color: var(--grey);
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      max-width: 420px;
+      margin-top: 20px;
+    }
+
+    /* ============================================================
+       FEATURED POEM — the large highlighted poem in the center
+    ============================================================
+       HOW TO EDIT:
+       - Change the poem title in .featured-poem-title
+       - Change the author in .featured-author
+       - Edit the poem lines inside .featured-poem-body
+         Each <span class="line"> is one line of the poem.
+         Add new lines by copying a <span class="line"> block.
+         Add a stanza break with <span class="stanza-break"></span>
+    ============================================================ */
+    .featured-section {
+      padding: 80px 5%;
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Soft radial glow behind the featured poem */
+    .featured-section::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(184,151,42,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .featured-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    /* Decorative ornament above the featured poem */
+    .ornament {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--gold-dim);
+      margin-bottom: 32px;
+      letter-spacing: 0.3em;
+    }
+
+    /* The poem title */
+    .featured-poem-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--white);
+      margin-bottom: 8px;
+      line-height: 1.1;
+    }
+
+    /* Author byline */
+    .featured-author {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 52px;
+    }
+
+    /* The poem body — each line is a <span class="line"> */
+    .featured-poem-body {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+      font-weight: 300;
+      line-height: 2;
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      border-left: 1px solid var(--gold-dim);
+      border-right: 1px solid var(--gold-dim);
+      padding: 48px 60px;
+      position: relative;
+    }
+
+    /* Corner accents on the poem frame */
+    .featured-poem-body::before,
+    .featured-poem-body::after {
+      content: '✦';
+      position: absolute;
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+    .featured-poem-body::before { top: -8px; left: 50%; transform: translateX(-50%); }
+    .featured-poem-body::after  { bottom: -8px; left: 50%; transform: translateX(-50%); }
+
+    .featured-poem-body .line {
+      display: block;
+      text-align: center;
+    }
+
+    /* Empty span used as a visual gap between stanzas */
+    .stanza-break {
+      display: block;
+      height: 1.4em;
+    }
+
+    /* Gold horizontal rule below the featured poem */
+    .featured-divider {
+      width: 80px;
+      height: 1px;
+      background: var(--gold);
+      margin: 48px auto 0;
+    }
+
+    /* ============================================================
+       POEMS GRID — the collection of additional poems
+    ============================================================
+       HOW TO ADD A POEM:
+       1. Copy one entire .poem-card block (from <!-- Poem Card -->
+          to its closing </div>)
+       2. Paste it inside .poems-grid
+       3. Update the title, author, and lines
+
+       HOW TO REMOVE A POEM:
+       Delete the entire .poem-card block.
+
+       POEM CARD LINES:
+       Each <p class="poem-line"> is one line.
+       Use <p class="poem-line break"></p> for a stanza break.
+    ============================================================ -->
+    ============================================================ */
+    .collection-section {
+      padding: 80px 5% 100px;
+      background: var(--black);
+    }
+
+    .collection-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .collection-header {
+      margin-bottom: 56px;
+    }
+
+    .collection-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 300;
+      color: var(--white);
+    }
+
+    .collection-subtitle {
+      color: var(--grey);
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+
+    /* Masonry-like poem grid */
+    .poems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2px;
+      background: var(--border);
+    }
+
+    /* Individual poem card */
+    .poem-card {
+      background: var(--dark);
+      padding: 44px 36px;
+      position: relative;
+      transition: background 0.35s;
+      overflow: hidden;
+    }
+
+    .poem-card:hover { background: #161610; }
+
+    /* Gold bottom-line reveal on hover */
+    .poem-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.45s ease;
+    }
+
+    .poem-card:hover::after { width: 100%; }
+
+    /* Small label e.g. "Poem No. 01" */
+    .poem-number {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 20px;
+    }
+
+    .poem-card-title {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--white);
+      margin-bottom: 6px;
+      line-height: 1.1;
+    }
+
+    .poem-card-author {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    /* Thin gold rule separating author from poem text */
+    .poem-card-rule {
+      width: 32px;
+      height: 1px;
+      background: var(--gold-dim);
+      margin-bottom: 24px;
+    }
+
+    .poem-card-body { }
+
+    .poem-line {
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      font-weight: 300;
+      color: var(--grey);
+      line-height: 1.85;
+      transition: color 0.3s;
+    }
+
+    .poem-card:hover .poem-line { color: #aaa89a; }
+
+    /* Stanza break inside a card */
+    .poem-line.break {
+      height: 0.9em;
+      display: block;
+    }
+
+    /* ============================================================
+       "ADD YOUR POEM" PLACEHOLDER CARD
+       This card acts as a visual prompt to add more poems.
+       Once you have enough poems, you can delete this card.
+    ============================================================ */
+    .poem-card-add {
+      background: transparent;
+      border: 1px dashed var(--gold-dim);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 300px;
+      padding: 44px 36px;
+      cursor: default;
+      transition: border-color 0.3s;
+    }
+
+    .poem-card-add:hover {
+      border-color: var(--gold);
+      background: transparent;
+    }
+
+    .poem-card-add::after { display: none; } /* remove hover line */
+
+    .add-icon {
+      font-size: 1.8rem;
+      color: var(--gold-dim);
+      margin-bottom: 14px;
+    }
+
+    .add-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+    }
+
+    /* ============================================================
+       FOOTER — same as index.html
+    ============================================================ */
+    footer {
+      background: var(--dark);
+      padding: 60px 5% 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand .nav-logo { font-size: 2rem; }
+
+    .footer-tagline {
+      color: var(--grey);
+      font-size: 0.85rem;
+      max-width: 240px;
+      margin-top: 10px;
+    }
+
+    .footer-links h4 {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-links ul { list-style: none; }
+    .footer-links ul li { margin-bottom: 10px; }
+
+    .footer-links ul a {
+      color: var(--grey);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.3s;
+    }
+
+    .footer-links ul a:hover { color: var(--gold); }
+
+    .footer-social {
+      display: flex;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .social-link {
+      width: 38px; height: 38px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--grey);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+
+    .social-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--grey);
+      letter-spacing: 0.08em;
+    }
+
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       RESPONSIVE — MOBILE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: var(--black);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        z-index: 999;
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 1rem; }
+      .nav-toggle { display: flex; z-index: 1001; }
+
+      .featured-poem-body { padding: 36px 24px; }
+
+      .footer-top { flex-direction: column; }
+
+      .poems-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVIGATION
+       Keep this the same as index.html. "Explore Their Work" is
+       marked active since we're on this page.
+  ============================================================ -->
+  <nav>
+    <a href="index.html" class="nav-logo">VSM</a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="work.html" class="active">Explore Their Work</a></li>
+      <li><a href="index.html#portfolio">Portfolio</a></li>
+      <li><a href="index.html#testimonials">Testimonials</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+
+  <!-- ============================================================
+       PAGE HERO
+       Change the title and subtitle text here.
+  ============================================================ -->
+  <div class="page-hero" style="padding-top: 100px;">
+    <div class="page-hero-content">
+      <p class="page-eyebrow">— VSM Presents —</p>
+      <!-- Main page title — <em> text appears in gold italic -->
+      <h1 class="page-title">Poetry by <em>Han</em></h1>
+      <!-- Short description below the title -->
+      <p class="page-subtitle">
+        Han's haven where they roam free, breathe and live.
+        They left the door open welcoming you.
+      </p>
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       FEATURED POEM
+       This is the large highlighted poem in the center of the page.
+
+       HOW TO EDIT:
+       • Change the title between <h2 class="featured-poem-title">
+       • Change the author between <p class="featured-author">
+       • Each <span class="line"> = one line of the poem
+       • Add a blank line between stanzas with:
+         <span class="stanza-break"></span>
+  ============================================================ -->
+  <section class="featured-section">
+    <div class="featured-inner reveal">
+
+      <p class="section-label">— Featured Poem —</p>
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <!-- ---- POEM TITLE: change this ---- -->
+      <h2 class="featured-poem-title">Still Waters</h2>
+
+      <!-- ---- AUTHOR NAME: change this ---- -->
+      <p class="featured-author">by Han </p>
+
+      <!-- ============================================================
+           POEM LINES
+           Copy, edit, or delete <span class="line"> entries.
+           For a blank line between stanzas, use:
+           <span class="stanza-break"></span>
+      ============================================================ -->
+      <div class="featured-poem-body">
+
+        <span class="line">My lover is so brave,</span>
+        <span class="line">Oh he is so brave</span>
+        <span class="line">Not in the way they praise in stories,</span>
+        <span class="line">But brave enough to always choose himself</span>
+
+        <span class="stanza-break"></span>
+
+        <span class="line">He has the courage to withhold,</span>
+        <span class="line">To measure out his care</span>
+        <span class="line">To remind me so easily,</span>
+        <span class="line">Exactly where I stand</span>
+
+        <span class="stanza-break"></span>
+
+        <span class="line">And I, on the other hand,</span>
+        <span class="line">Perfect the art of pretending</span>
+        <span class="line">I blur what I can clearly see,</span>
+        <span class="line">I soften truths that do not soften me</span>
+
+        <span class="stanza-break"></span>
+
+        <span class="line">I look away from the distance between,</span>
+        <span class="line">How I am loved</span>
+        <span class="line">and how I long to be loved,</span>
+        <span class="line">It’s not that he is cruel</span> 
+
+        <span class="stanza-break"></span>
+
+        <span class="line">It’s just that on certain days,</span>
+        <span class="line">Our differences speak louder than our love</span>
+        <span class="line">So here I am, calling myself a coward,</span>
+        <span class="line">Because I cannot do what he does so well</span>
+
+        <span class="stanza-break"></span>
+
+        <span class="line">Walk away untouched,</span>
+        <span class="line">Choose myself without hesitation,</span>
+        <span class="line">For I am not as brave as my lover</span>
+
+      </div>
+      <!-- ---- END OF FEATURED POEM LINES ---- -->
+
+      <div class="featured-divider"></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       POEM COLLECTION GRID
+       Each .poem-card is one poem in the grid.
+
+       HOW TO ADD A POEM:
+       Copy a full poem card block (see comments below) and paste
+       it before the closing </div> of .poems-grid.
+       Update the number, title, author, and lines.
+
+       HOW TO REMOVE A POEM:
+       Delete the entire poem card block.
+  ============================================================ -->
+  <section class="collection-section">
+    <div class="collection-inner">
+
+      <div class="collection-header reveal">
+        <p class="section-label">— The Collection —</p>
+        <h2 class="collection-title">More Poems</h2>
+        <p class="collection-subtitle">Each piece a world of its own.</p>
+      </div>
+
+      <div class="poems-grid">
+
+        <!-- ========================================================
+             POEM CARD 1
+             Change: poem-number label, poem-card-title, poem-card-author,
+             and the <p class="poem-line"> entries below.
+             Add more lines by copying a <p class="poem-line"> tag.
+             Add a stanza break with: <p class="poem-line break"></p>
+        ======================================================== -->
+        <div class="poem-card reveal">
+          <p class="poem-number">Poem No. 01</p>
+          <h3 class="poem-card-title">Ember Light</h3>
+          <p class="poem-card-author">by Your Friend's Name</p>
+          <div class="poem-card-rule"></div>
+          <div class="poem-card-body">
+            <p class="poem-line">We are made of fading things —</p>
+            <p class="poem-line">the last hour of amber sky,</p>
+            <p class="poem-line">a match struck in a dark room</p>
+            <p class="poem-line">for nothing but the light of it.</p>
+            <p class="poem-line break"></p>
+            <p class="poem-line">Burn slowly, beloved.</p>
+            <p class="poem-line">The night is long enough.</p>
+          </div>
+        </div>
+
+        <!-- ========================================================
+             POEM CARD 2
+        ======================================================== -->
+        <div class="poem-card reveal">
+          <p class="poem-number">Poem No. 02</p>
+          <h3 class="poem-card-title">Salt & Distance</h3>
+          <p class="poem-card-author">by Your Friend's Name</p>
+          <div class="poem-card-rule"></div>
+          <div class="poem-card-body">
+            <p class="poem-line">The sea does not mourn</p>
+            <p class="poem-line">what it gives back to the shore.</p>
+            <p class="poem-line break"></p>
+            <p class="poem-line">I am learning that from it —</p>
+            <p class="poem-line">to release without grief,</p>
+            <p class="poem-line">to let the tide decide</p>
+            <p class="poem-line">what was mine to keep.</p>
+          </div>
+        </div>
+
+        <!-- ========================================================
+             POEM CARD 3
+        ======================================================== -->
+        <div class="poem-card reveal">
+          <p class="poem-number">Poem No. 03</p>
+          <h3 class="poem-card-title">Old Gold</h3>
+          <p class="poem-card-author">by Your Friend's Name</p>
+          <div class="poem-card-rule"></div>
+          <div class="poem-card-body">
+            <p class="poem-line">There is gold in old things —</p>
+            <p class="poem-line">in the worn spine of a book,</p>
+            <p class="poem-line">in a voice remembering a name</p>
+            <p class="poem-line">it thought it had forgotten.</p>
+            <p class="poem-line break"></p>
+            <p class="poem-line">Time does not erase.</p>
+            <p class="poem-line">It gilts.</p>
+          </div>
+        </div>
+
+        <!-- ========================================================
+             PLACEHOLDER CARD — DELETE when you have enough poems.
+             Just remove this entire block once you've added your own.
+        ======================================================== -->
+        <div class="poem-card poem-card-add reveal">
+          <div class="add-icon">✦</div>
+          <p class="add-label">Your poem goes here</p>
+        </div>
+
+        <!-- ========================================================
+             PLACEHOLDER CARD 2 — DELETE when you have enough poems.
+        ======================================================== -->
+        <div class="poem-card poem-card-add reveal">
+          <div class="add-icon">✦</div>
+          <p class="add-label">Your poem goes here</p>
+        </div>
+
+        <!-- ========================================================
+             PLACEHOLDER CARD 3 — DELETE when you have enough poems.
+        ======================================================== -->
+        <div class="poem-card poem-card-add reveal">
+          <div class="add-icon">✦</div>
+          <p class="add-label">Your poem goes here</p>
+        </div>
+
+      </div><!-- end .poems-grid -->
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER — same as index.html
+  ============================================================ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">VSM</a>
+          <p class="footer-tagline">Crafted with vision. Built to last.</p>
+          <div class="footer-social">
+            <a href="#" class="social-link" aria-label="Instagram">IG</a>
+            <a href="#" class="social-link" aria-label="Twitter/X">X</a>
+            <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="work.html">Explore Their Work</a></li>
+            <li><a href="index.html#portfolio">Portfolio</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="mailto:hello@vsm.com">hello@vsm.com</a></li>
+            <li><a href="tel:+1234567890">+1 (234) 567-890</a></li>
+            <li><a href="#">Lahore, PK</a></li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="footer-bottom">&copy; 2025 VSM. All rights reserved.</div>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT — no need to edit
+  ============================================================ -->
+  <script>
+
+    // Mobile menu toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // Scroll-reveal animation
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer  = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      }),
+      { threshold: 0.1 }
+    );
+
+    revealEls.forEach(el => observer.observe(el));
+
+  </script>
+
+</body>
+</html>
