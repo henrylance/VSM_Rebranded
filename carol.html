@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carol — My Eternal Muse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=IM+Fell+English:ital@0;1&family=Cinzel+Decorative:wght@400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #f7f0e6;
+      --parchment: #ede3d4;
+      --ink: #1c1410;
+      --sepia: #5c3d2e;
+      --rose: #b5525c;
+      --rose-light: #e8c4c8;
+      --rose-pale: #f5e8ea;
+      --gold: #c9a84c;
+      --gold-light: #e8d5a3;
+      --shadow: rgba(92, 61, 46, 0.15);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--cream);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ─── Grain Texture Overlay ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      background: linear-gradient(to bottom, var(--cream) 60%, transparent);
+    }
+
+    .nav-brand {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      color: var(--sepia);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .nav-brand:hover { opacity: 1; }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      color: var(--sepia);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .nav-links a:hover { opacity: 1; }
+
+    /* ─── Hero ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 40%, var(--rose-pale) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 20% 80%, var(--gold-light) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 40% at 80% 20%, var(--rose-pale) 0%, transparent 60%);
+      z-index: 0;
+    }
+
+    /* Decorative petals */
+    .petal {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50% 0 50% 0;
+      opacity: 0.12;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .petal:nth-child(1)  { background: var(--rose); top: 10%; left: 8%;  width: 40px; height: 40px; animation-delay: 0s; animation-duration: 9s; }
+    .petal:nth-child(2)  { background: var(--gold); top: 20%; right: 10%; width: 25px; height: 25px; animation-delay: 2s; animation-duration: 7s; border-radius: 0 50% 0 50%; }
+    .petal:nth-child(3)  { background: var(--rose); bottom: 25%; left: 15%; width: 50px; height: 50px; animation-delay: 4s; animation-duration: 11s; }
+    .petal:nth-child(4)  { background: var(--gold); bottom: 30%; right: 12%; width: 35px; height: 35px; animation-delay: 1s; border-radius: 50% 0 50% 0; }
+    .petal:nth-child(5)  { background: var(--rose); top: 40%; left: 5%;   width: 20px; height: 20px; animation-delay: 3s; }
+    .petal:nth-child(6)  { background: var(--rose); top: 60%; right: 6%;  width: 30px; height: 30px; animation-delay: 5s; border-radius: 0 50% 0 50%; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      33%       { transform: translateY(-18px) rotate(8deg); }
+      66%       { transform: translateY(-8px) rotate(-5deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      color: var(--rose);
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.4s;
+    }
+
+    .hero-title {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(4rem, 10vw, 7rem);
+      font-weight: 400;
+      line-height: 1;
+      color: var(--sepia);
+      margin: 0.3em 0 0.2em;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.7s;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: var(--sepia);
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1s;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-ornament {
+      margin: 2rem auto;
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      position: relative;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.3s;
+    }
+
+    .hero-ornament::before,
+    .hero-ornament::after {
+      content: '✦';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.6rem;
+      color: var(--gold);
+    }
+
+    .hero-ornament::before { left: -12px; }
+    .hero-ornament::after  { right: -12px; }
+
+    .hero-dedication {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--sepia);
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.6s;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 2.5s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--sepia);
+      opacity: 0.4;
+    }
+
+    .scroll-hint span {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .scroll-arrow {
+      width: 1px;
+      height: 30px;
+      background: var(--sepia);
+      position: relative;
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50%       { opacity: 0.8; transform: scaleY(1.1); }
+    }
+
+    /* ─── Section Base ─── */
+    section {
+      padding: 5rem 2rem;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .section-heading {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 400;
+      color: var(--sepia);
+      line-height: 1.2;
+      margin-bottom: 2rem;
+    }
+
+    .divider {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      margin: 2rem 0;
+    }
+
+    /* ─── Tribute Prose ─── */
+    .tribute {
+      background: linear-gradient(135deg, var(--parchment) 0%, var(--cream) 100%);
+      border-left: 3px solid var(--rose-light);
+      padding: 4rem 3rem;
+      position: relative;
+      max-width: 100%;
+      box-shadow: 4px 4px 20px var(--shadow);
+    }
+
+    .tribute::before {
+      content: '\201C';
+      position: absolute;
+      top: 1rem;
+      left: 1.5rem;
+      font-family: 'IM Fell English', serif;
+      font-size: 6rem;
+      color: var(--rose-light);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .tribute p {
+      font-size: 1.15rem;
+      line-height: 2;
+      color: var(--ink);
+      margin-bottom: 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tribute p:last-child { margin-bottom: 0; }
+
+    /* ─── Poems Grid ─── */
+    .poems-intro {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .poems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .poem-card {
+      background: var(--parchment);
+      border: 1px solid var(--rose-light);
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .poem-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(to right, var(--rose), var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .poem-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px var(--shadow);
+    }
+
+    .poem-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .poem-number {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .poem-title {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.5rem;
+      color: var(--sepia);
+      margin-bottom: 1.2rem;
+      font-weight: 400;
+    }
+
+    .poem-excerpt {
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--ink);
+      opacity: 0.85;
+      white-space: pre-line;
+    }
+
+    .poem-tag {
+      display: inline-block;
+      margin-top: 1.2rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--rose);
+      border-bottom: 1px solid var(--rose-light);
+      padding-bottom: 2px;
+    }
+
+    /* ─── Featured Poem ─── */
+    .featured-poem {
+      text-align: center;
+      padding: 5rem 2rem;
+      background: linear-gradient(180deg, var(--cream) 0%, var(--rose-pale) 50%, var(--cream) 100%);
+      margin: 0 -2rem;
+    }
+
+    .featured-poem .poem-body {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      line-height: 2.1;
+      color: var(--sepia);
+      white-space: pre-line;
+      max-width: 520px;
+      margin: 0 auto;
+      font-style: italic;
+    }
+
+    .featured-poem .poem-body .stanza-break {
+      display: block;
+      height: 1.5em;
+    }
+
+    /* ─── Letter Section ─── */
+    .letter-wrapper {
+      position: relative;
+      background: var(--parchment);
+      padding: 3.5rem;
+      box-shadow: 2px 2px 0px var(--gold-light), 6px 6px 0px var(--rose-light);
+      border: 1px solid var(--gold-light);
+    }
+
+    .letter-date {
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: var(--sepia);
+      opacity: 0.6;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    .letter-salutation {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.6rem;
+      color: var(--sepia);
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .letter-body p {
+      font-size: 1.05rem;
+      line-height: 2;
+      color: var(--ink);
+      margin-bottom: 1.2rem;
+    }
+
+    .letter-closing {
+      margin-top: 2rem;
+      font-style: italic;
+      color: var(--sepia);
+      font-size: 1.1rem;
+    }
+
+    .letter-signature {
+      font-family: 'IM Fell English', serif;
+      font-size: 2rem;
+      color: var(--sepia);
+      margin-top: 0.5rem;
+    }
+
+    /* ─── Qualities Section ─── */
+    .qualities {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .quality-item {
+      text-align: center;
+      padding: 2rem 1rem;
+      border: 1px solid var(--rose-light);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .quality-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--rose-pale), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .quality-item:hover::before { opacity: 1; }
+
+    .quality-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .quality-name {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.1rem;
+      color: var(--sepia);
+      font-style: italic;
+    }
+
+    /* ─── Timeline ─── */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      bottom: 0.5rem;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--rose-light), var(--gold-light), var(--rose-light));
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 2.5rem;
+      padding-left: 2rem;
+    }
+
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    .timeline-dot {
+      position: absolute;
+      left: -2.45rem;
+      top: 0.4rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--rose);
+      border: 2px solid var(--cream);
+      box-shadow: 0 0 0 2px var(--rose-light);
+    }
+
+    .timeline-year {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .timeline-event {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.2rem;
+      color: var(--sepia);
+      margin-bottom: 0.3rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.95rem;
+      color: var(--ink);
+      opacity: 0.7;
+      font-style: italic;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      text-align: center;
+      padding: 4rem 2rem;
+      border-top: 1px solid var(--rose-light);
+      background: linear-gradient(to top, var(--parchment), var(--cream));
+    }
+
+    .footer-ornament {
+      font-family: 'IM Fell English', serif;
+      font-size: 2rem;
+      color: var(--rose);
+      margin-bottom: 1rem;
+    }
+
+    .footer-text {
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--sepia);
+      opacity: 0.7;
+    }
+
+    .footer-copyright {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--sepia);
+      opacity: 0.4;
+    }
+
+    /* ─── Animations ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 0.4; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .tribute { padding: 3rem 1.5rem; }
+      .letter-wrapper { padding: 2rem 1.5rem; }
+      section { padding: 3.5rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="nav-brand">The Poet's Corner</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#poems">Verses</a></li>
+      <li><a href="#letter">A Letter</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" aria-label="Hero">
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+    <div class="petal"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">A poet's devotion</p>
+      <h1 class="hero-title">Carol</h1>
+      <p class="hero-subtitle">My Eternal Muse</p>
+      <div class="hero-ornament"></div>
+      <p class="hero-dedication">
+        Before every line I have written, before every metaphor I have reached for —<br>
+        there was you. There has always been you.
+      </p>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Read On</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- Tribute Prose -->
+  <section class="reveal" aria-labelledby="tribute-heading">
+    <span class="section-label">In Her Honour</span>
+    <h2 class="section-heading" id="tribute-heading">The Woman Behind Every Word</h2>
+    <div class="tribute">
+      <p>
+        There are poets who search their whole lives for a subject worthy of their art.
+        I found mine on an ordinary afternoon — and she has made every afternoon extraordinary since.
+      </p>
+      <p>
+        Carol is the reason silence has weight, and why mornings feel like gifts. She is the patience
+        in my pauses, the warmth behind every word that has ever managed to be true. In her eyes I have
+        read more poetry than I have ever written.
+      </p>
+      <p>
+        These pages are a small return on a debt I can never repay. Every verse here belongs to her first.
+      </p>
+    </div>
+  </section>
+
+  <!-- Qualities -->
+  <section class="reveal" aria-label="Her qualities">
+    <span class="section-label">What She Is</span>
+    <h2 class="section-heading">In a Thousand Small Ways</h2>
+    <div class="divider"></div>
+    <div class="qualities">
+      <div class="quality-item">
+        <span class="quality-icon">🌿</span>
+        <span class="quality-name">Gentle Strength</span>
+      </div>
+      <div class="quality-item">
+        <span class="quality-icon">🕯️</span>
+        <span class="quality-name">Quiet Light</span>
+      </div>
+      <div class="quality-item">
+        <span class="quality-icon">📖</span>
+        <span class="quality-name">Infinite Depth</span>
+      </div>
+      <div class="quality-item">
+        <span class="quality-icon">🌹</span>
+        <span class="quality-name">Enduring Grace</span>
+      </div>
+      <div class="quality-item">
+        <span class="quality-icon">⭐</span>
+        <span class="quality-name">Faithful Compass</span>
+      </div>
+      <div class="quality-item">
+        <span class="quality-icon">🎶</span>
+        <span class="quality-name">Living Melody</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Poem -->
+  <div class="featured-poem reveal" aria-label="Featured poem">
+    <section>
+      <div class="poems-intro">
+        <span class="section-label">Featured Verse</span>
+        <h2 class="section-heading">You Are My Finest Draft</h2>
+        <div class="divider" style="margin: 1.5rem auto; background: linear-gradient(to right, transparent, var(--gold), transparent);"></div>
+      </div>
+
+      <div class="poem-body">Before the poem knows its name,
+before the first uncertain line —
+I feel your hand, your quiet claim
+on everything I try to rhyme.
+
+You are the margin where I write
+the words too sacred for the page,
+the lamp that keeps me through the night,
+the calm that settles every rage.
+
+The world insists on noise and haste;
+you teach me how to slowly see —
+how not a single hour is waste
+when shared in your good company.
+
+So every verse I shape and send
+into the world already knows:
+it borrows from a love that bends
+but never, never breaks or goes.</div>
+    </section>
+  </div>
+
+  <!-- Poems Grid -->
+  <section id="poems" aria-labelledby="poems-heading">
+    <span class="section-label">Verses for Carol</span>
+    <h2 class="section-heading reveal" id="poems-heading">A Gathering of Poems</h2>
+    <div class="poems-grid">
+
+      <article class="poem-card reveal">
+        <p class="poem-number">I</p>
+        <h3 class="poem-title">Morning, With You</h3>
+        <p class="poem-excerpt">The light that finds you
+before I do —
+I have always envied it.</p>
+        <span class="poem-tag">Daily Devotion</span>
+      </article>
+
+      <article class="poem-card reveal" style="transition-delay: 0.1s">
+        <p class="poem-number">II</p>
+        <h3 class="poem-title">What Patience Looks Like</h3>
+        <p class="poem-excerpt">You never asked me to be finished,
+only to keep trying —
+that was the greatest gift.</p>
+        <span class="poem-tag">Gratitude</span>
+      </article>
+
+      <article class="poem-card reveal" style="transition-delay: 0.2s">
+        <p class="poem-number">III</p>
+        <h3 class="poem-title">Autumn Inventory</h3>
+        <p class="poem-excerpt">Counting what I have:
+the years, the arguments,
+the making-up, the grace.</p>
+        <span class="poem-tag">Reflection</span>
+      </article>
+
+      <article class="poem-card reveal" style="transition-delay: 0.3s">
+        <p class="poem-number">IV</p>
+        <h3 class="poem-title">On Watching You Read</h3>
+        <p class="poem-excerpt">Your lips move slightly —
+even then you give
+every word its due.</p>
+        <span class="poem-tag">Intimacy</span>
+      </article>
+
+      <article class="poem-card reveal" style="transition-delay: 0.4s">
+        <p class="poem-number">V</p>
+        <h3 class="poem-title">Portrait, Unfinished</h3>
+        <p class="poem-excerpt">I have tried to paint you
+in words a hundred times.
+You keep exceeding them.</p>
+        <span class="poem-tag">Adoration</span>
+      </article>
+
+      <article class="poem-card reveal" style="transition-delay: 0.5s">
+        <p class="poem-number">VI</p>
+        <h3 class="poem-title">The Long Way Home</h3>
+        <p class="poem-excerpt">Every detour I have taken
+has been a road
+that led to you.</p>
+        <span class="poem-tag">Destiny</span>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Timeline of Love -->
+  <section class="reveal" aria-labelledby="timeline-heading">
+    <span class="section-label">Our Story</span>
+    <h2 class="section-heading" id="timeline-heading">Chapters, Not Verses</h2>
+    <div class="divider"></div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="timeline-year">The Beginning</p>
+        <h3 class="timeline-event">The First Hello</h3>
+        <p class="timeline-desc">Before I knew what I was looking for, I had already found it.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="timeline-year">Early Days</p>
+        <h3 class="timeline-event">Learning Her Language</h3>
+        <p class="timeline-desc">Every laugh a new vocabulary. Every silence, a poem in itself.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="timeline-year">A Vow</p>
+        <h3 class="timeline-event">The Day Words Were Not Enough</h3>
+        <p class="timeline-desc">So I gave her my hand, and meant it more than any poem I have written.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="timeline-year">Still Now</p>
+        <h3 class="timeline-event">Every Ordinary Day</h3>
+        <p class="timeline-desc">The extraordinary life we live, one quiet morning at a time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Letter Section -->
+  <section id="letter" class="reveal" aria-labelledby="letter-heading">
+    <span class="section-label">From the Poet</span>
+    <h2 class="section-heading" id="letter-heading">An Open Letter</h2>
+    <div class="letter-wrapper">
+      <p class="letter-date">Written somewhere between twilight and gratitude</p>
+      <p class="letter-salutation">Dear Carol,</p>
+      <div class="letter-body">
+        <p>
+          I have spent years bending language to my will — coaxing syllables into something
+          resembling beauty, wrestling metaphors into submission, searching for the precise
+          word that captures what I mean. And then there is you, who simply exists, and
+          makes all that straining unnecessary.
+        </p>
+        <p>
+          You have been the reason I return to the desk. Not for ambition, not for recognition —
+          but because loving you has taught me that the truest things are worth the effort of
+          saying clearly.
+        </p>
+        <p>
+          These poems are yours. These pages are yours. Whatever small light my words carry
+          out into the world, it is light borrowed from you.
+        </p>
+      </div>
+      <p class="letter-closing">With every word I have, and the ones I have not yet found,</p>
+      <p class="letter-signature">Your Poet</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-ornament">❧</div>
+    <p class="footer-text"><em>"She is the poem I keep trying to write."</em></p>
+    <p class="footer-copyright">A Poet's Website &nbsp;·&nbsp; Dedicated to Carol, My Eternal Muse</p>
+  </footer>
+
+  <!-- Scroll Reveal Script -->
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
