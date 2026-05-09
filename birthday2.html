@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday — VSM</title>
+
+  <!-- ============================================================
+       FONTS — same as the rest of the VSM site
+  ============================================================ -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    /* ============================================================
+       CSS VARIABLES — same palette as the rest of VSM
+    ============================================================ */
+    :root {
+      --black:      #080808;
+      --dark:       #111111;
+      --gold:       #B8972A;
+      --gold-light: #D4AF5A;
+      --gold-dim:   #7A6320;
+      --white:      #F5F0E8;
+      --grey:       #888880;
+      --border:     rgba(184,151,42,0.2);
+
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body:    'Raleway', sans-serif;
+      --max-width: 1200px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ============================================================
+       FLOATING PARTICLES (gold confetti dots — CSS only)
+       These are purely decorative. Remove the #particles div
+       in the HTML if you don't want them.
+    ============================================================ */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px; height: 3px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0;
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ============================================================
+       NAVIGATION — same as index.html
+    ============================================================ -->
+    <!-- Update links here if you rename pages -->
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 5%;
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--grey);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      width: 24px; height: 1px;
+      background: var(--gold);
+      transition: all 0.3s;
+    }
+
+    /* ============================================================
+       MAIN LAYOUT — full-height centered stage
+    ============================================================ */
+    .stage {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 5% 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       PAGE LABEL
+    ============================================================ */
+    .page-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    /* ============================================================
+       BIRTHDAY CARD — the main feature card
+    ============================================================ -->
+    /* The outer wrapper that fades in/out during transitions */
+    .card-wrapper {
+      width: 100%;
+      max-width: 720px;
+      position: relative;
+    }
+
+    /* The card itself */
+    .birthday-card {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      padding: 72px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    /* Faded state used during transitions */
+    .birthday-card.fading {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    /* Corner ornaments — purely decorative gold corners */
+    .birthday-card::before,
+    .birthday-card::after {
+      content: '';
+      position: absolute;
+      width: 28px; height: 28px;
+      border-color: var(--gold-dim);
+      border-style: solid;
+    }
+
+    .birthday-card::before {
+      top: 20px; left: 20px;
+      border-width: 1px 0 0 1px;
+    }
+
+    .birthday-card::after {
+      bottom: 20px; right: 20px;
+      border-width: 0 1px 1px 0;
+    }
+
+    /* Inner corner pair (top-right, bottom-left) */
+    .corner-tr, .corner-bl {
+      position: absolute;
+      width: 28px; height: 28px;
+      border-color: var(--gold-dim);
+      border-style: solid;
+    }
+
+    .corner-tr { top: 20px; right: 20px; border-width: 1px 1px 0 0; }
+    .corner-bl { bottom: 20px; left: 20px; border-width: 0 0 1px 1px; }
+
+    /* Soft radial glow behind the card content */
+    .card-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px; height: 300px;
+      background: radial-gradient(ellipse, rgba(184,151,42,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ---- Ornament above the name ---- */
+    .card-ornament {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--gold-dim);
+      letter-spacing: 0.5em;
+      margin-bottom: 28px;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---- "Happy Birthday" headline ---- */
+    .card-greeting {
+      font-family: var(--font-display);
+      font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---- Person's name — the big centrepiece ---- */
+    .card-name {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---- Date beneath the name ---- */
+    .card-date {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Thin gold divider between name and message */
+    .card-divider {
+      width: 48px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 36px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---- Birthday message ---- */
+    .card-message {
+      font-family: var(--font-display);
+      font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--grey);
+      line-height: 1.9;
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---- From line below the message ---- */
+    .card-from {
+      margin-top: 32px;
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      position: relative;
+      z-index: 1;
+    }
+
+
+
+    /* ============================================================
+       FOOTER — same as index.html
+    ============================================================ */
+    footer {
+      background: var(--dark);
+      padding: 48px 5% 28px;
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+    }
+
+    .footer-bottom-text {
+      font-size: 0.72rem;
+      color: var(--grey);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-links-row {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .footer-links-row a {
+      color: var(--grey);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .footer-links-row a:hover { color: var(--gold); }
+
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: fadeUp 0.9s ease both;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: var(--black);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        z-index: 999;
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 1rem; }
+      .nav-toggle { display: flex; z-index: 1001; }
+
+      .birthday-card { padding: 48px 28px; }
+
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-links-row { justify-content: center; flex-wrap: wrap; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Floating gold particle dots (decorative) -->
+  <!-- To remove: delete this div entirely -->
+  <div id="particles"></div>
+
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="vsm.png" alt="VSM" style="height: 30px;">
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="work.html">Collection</a></li>
+      <li><a href="birthday.html" class="active">Birthdays</a></li>
+      <li><a href="index.html#testimonials">Testimonials</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="index.html#about">About</a></li>
+    </ul>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+
+  <!-- ============================================================
+       MAIN STAGE
+  ============================================================ -->
+  <main class="stage">
+
+    <p class="page-eyebrow animate-in">— A VSM Celebration —</p>
+
+    <div class="card-wrapper animate-in">
+
+      <!-- The birthday card — content is injected by JavaScript -->
+      <div class="birthday-card" id="birthdayCard">
+        <div class="card-glow"></div>
+        <div class="corner-tr"></div>
+        <div class="corner-bl"></div>
+
+        <span class="card-ornament" id="cardOrnament">✦ &nbsp; ✦ &nbsp; ✦</span>
+        <p class="card-greeting">Happy Birthday</p>
+        <h1 class="card-name" id="cardName"></h1>
+        <p class="card-date" id="cardDate"></p>
+        <div class="card-divider"></div>
+        <p class="card-message" id="cardMessage"></p>
+        <p class="card-from" id="cardFrom"></p>
+      </div>
+
+
+
+    </div>
+  </main>
+
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <div class="footer-inner">
+      <a href="index.html" class="footer-logo">
+        <img src="vsm.png" alt="VSM" style="height: 36px;">
+      </a>
+      <ul class="footer-links-row">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="work.html">Their Work</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <p class="footer-bottom-text">&copy; 2025 VSM. All rights reserved.</p>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+
+    /* =============================================================
+       ★ BIRTHDAY LIST — ADD YOUR PEOPLE HERE ★
+       ---------------------------------------------------------------
+       Each entry is an object with these fields:
+
+         name    — The person's name (appears large on the card)
+         date    — Their birthday, e.g. "May 12" or "12th May 2025"
+         message — The birthday message shown on the card
+         from    — Who it's from (shown small at the bottom)
+
+       HOW TO ADD A PERSON:
+       Copy one block (from the opening { to the closing },)
+       and paste it after the last entry. Fill in the details.
+
+       HOW TO REMOVE A PERSON:
+       Delete their entire { ... }, block.
+
+       The page will automatically update the dots and counter.
+    ============================================================= */
+    const birthdays = [
+
+      {
+        name:    "Sorshanae",
+        date:    "May 10th",
+        message: "May this year bring you everything you've quietly wished for — the kind of joy that surprises you, the kind of peace that stays.",
+        from:    "— With love, from VSM"
+      },
+
+      {
+        name:    "James",
+        date:    "June 18th",
+        message: "Another year wiser, another year more yourself. Here's to the moments that made you laugh until your sides hurt.",
+        from:    "— With love, from VSM"
+      },
+
+      {
+        name:    "Layla",
+        date:    "August 3rd",
+        message: "You carry light wherever you go. Today, we hope that light comes back to you a hundredfold. Happy birthday.",
+        from:    "— With love, from VSM"
+      },
+
+      /* ---- Add more people below this line ---- */
+
+    ];
+    /* ---- End of birthday list ---- */
+
+
+    /* =============================================================
+       RENDERING LOGIC — no need to edit below this line
+    ============================================================= */
+
+    // Always shows the first person in the list (index 0)
+    const person = birthdays[0];
+    document.getElementById('cardName').textContent    = person.name;
+    document.getElementById('cardDate').textContent    = person.date;
+    document.getElementById('cardMessage').textContent = person.message;
+    document.getElementById('cardFrom').textContent    = person.from || '';
+
+    // Mobile nav toggle
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('open');
+      });
+    });
+
+    // Generate floating particles
+    const particleContainer = document.getElementById('particles');
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left     = Math.random() * 100 + 'vw';
+      p.style.width    = (Math.random() * 3 + 1) + 'px';
+      p.style.height   = p.style.width;
+      p.style.animationDuration  = (Math.random() * 14 + 8) + 's';
+      p.style.animationDelay     = (Math.random() * 12) + 's';
+      p.style.opacity  = Math.random() * 0.5;
+      particleContainer.appendChild(p);
+    }
+
+  </script>
+
+</body>
+</html>
